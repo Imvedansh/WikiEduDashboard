@@ -78,26 +78,20 @@ function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
         ref={searchInputRef}
       />
 
-      {isAutocompleteLoading && (
-        <div className="loader">
-          <div className="loading__spinner" />
-        </div>
-      )}
+      {
+        isAutocompleteLoading && <div className="loader"><div className="loading__spinner" /></div>
+      }
 
       <button onClick={searchHandler} disabled={disabled}>
         {I18n.t('article_finder.search')}
       </button>
 
       <div className="autocomplete">
-        {suggestions.map(sug => (
-          <div
-            key={sug}
-            className="autocomplete-item"
-            onClick={() => autoCompleteClickHandler(sug)}
-          >
-            {sug}
-          </div>
-        ))}
+        {
+          suggestions.map((sug) => {
+            return <div key={sug} className="autocomplete-item" onClick={() => autoCompleteClickHandler(sug)}> {sug} </div>;
+          })
+        }
       </div>
     </div>
   );
