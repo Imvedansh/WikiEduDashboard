@@ -36,6 +36,7 @@ function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
 
   const inputChangeHandler = (e) => {
     onChange(e.target.value);
+    // autocomplete disabled while disabled (during loading etc.)
     if (!disabled) {
       if (e.target.value === '') {
         setSuggestions([]);
@@ -52,6 +53,7 @@ function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
   };
 
   const onKeyDownHandler = (e) => {
+    // Search on Enter
     if (e.key === 'Enter') {
       searchHandler();
     }
@@ -59,6 +61,7 @@ function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
 
   const autoCompleteClickHandler = (suggestion) => {
     onChange(suggestion);
+    // call onSearch directly instead of searchHandler to use the latest suggestion value and not the old state value
     onSearch(suggestion);
     setSuggestions([]);
   };
