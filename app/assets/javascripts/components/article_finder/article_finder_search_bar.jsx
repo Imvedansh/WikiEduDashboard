@@ -6,7 +6,6 @@ import { fetchArticleAutocompleteResults } from '../../utils/article_finder_util
 function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
   const [suggestions, setSuggestions] = useState([]);
   const [isAutocompleteLoading, setAutocompleteLoading] = useState(false);
-  const [showEmptySearchError, setShowEmptySearchError] = useState(false);
   const searchInputRef = useRef(null);
 
   let searchClass = 'article-finder-search-bar';
@@ -20,22 +19,10 @@ function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
     const timer = setTimeout(() => {
       if (searchInputRef.current) {
         searchInputRef.current.focus();
-
-        // Trigger search if input already has a value
-        if (value.trim() !== '') {
-          onSearch(value.trim());
-        }
       }
     }, 100);
     return () => clearTimeout(timer);
   }, []);
-
-  // Hide error message when user starts typing
-  useEffect(() => {
-    if (value.trim() !== '' && showEmptySearchError) {
-      setShowEmptySearchError(false);
-    }
-  }, [value, showEmptySearchError]);
 
   const _getSuggestionsApi = useCallback(
     debounce(async (q) => {
@@ -59,15 +46,7 @@ function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
   };
 
   const searchHandler = () => {
-    if (disabled) return;
-    if (value.trim() === '') {
-      setShowEmptySearchError(true);
-      if (searchInputRef.current) {
-        searchInputRef.current.focus();
-      }
-      return;
-    }
-    setShowEmptySearchError(false);
+    if (disabled || value.trim() === '') return;
     setSuggestions([]);
     onSearch(value);
   };
@@ -82,7 +61,6 @@ function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
     onChange(suggestion);
     onSearch(suggestion);
     setSuggestions([]);
-    setShowEmptySearchError(false);
   };
 
   return (
