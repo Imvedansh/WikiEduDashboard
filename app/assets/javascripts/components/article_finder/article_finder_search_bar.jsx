@@ -24,15 +24,12 @@ function ArticleFinderSearchBar({ value, onChange, onSearch, disabled, wiki }) {
     return () => clearTimeout(timer);
   }, []);
 
-  const _getSuggestionsApi = useCallback(
-    debounce(async (q) => {
-      setAutocompleteLoading(true);
-      const results = await fetchArticleAutocompleteResults(q, wiki).catch(() => []);
-      setAutocompleteLoading(false);
-      setSuggestions(results);
-    }, 500),
-    []
-  );
+  const _getSuggestionsApi = useCallback(debounce(async (q) => {
+    setAutocompleteLoading(true);
+    const results = await fetchArticleAutocompleteResults(q, wiki).catch(() => []);
+    setAutocompleteLoading(false);
+    setSuggestions(results);
+  }, 500), []);
 
   const inputChangeHandler = (e) => {
     onChange(e.target.value);
